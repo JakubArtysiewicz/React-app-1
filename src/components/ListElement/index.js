@@ -8,6 +8,9 @@ const ListElement = ({element}) => {
     const [isActive, setActive] = useState(false)
     const [isActiveModal, setActiveModal] = useState(false)
 
+    const [title, setTitle] = useState(element.title);
+    console.log(title)
+
     console.log(isActive)
 
     useEffect(() => {setIsDone(false)},[]) // <== Hook
@@ -21,11 +24,10 @@ const ListElement = ({element}) => {
             <h2 className="p-7"
                 onClick={()=> setActive(!isActive)}
             >
-                {element.title}
+                {title}
             
             </h2>
-                { isActive && (
-            <a className="p-7"> {element.description}</a>
+                { isActive && (<a className="p-7">{element.description}</a>
                 )}
 
     </div>
@@ -50,7 +52,13 @@ const ListElement = ({element}) => {
                 <label>Tytuł</label>
                 <input className={"text-black text-center"}
                     type="text"
-                    value={element.title}
+                    value = {title}
+                       onChange = {(event)=> setTitle(event.target.value)}
+                />
+                <label>Notatka</label>
+                <input className={"text-black text-center"}
+                       type="text"
+                       value={element.description}
                 />
             </Modal>
         </>
