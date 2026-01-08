@@ -1,4 +1,4 @@
-import ListElement from "./ListElement";
+import ListElement from "../ListElement";
 
 const AppContainer = () => {
 

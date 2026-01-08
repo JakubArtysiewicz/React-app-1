@@ -1,32 +1,40 @@
 import {useEffect, useState} from "react";
+import modal from "../modal";
+import Modal from "../modal";
 
 const ListElement = ({element}) => {
 
     const [isDone, setIsDone] = useState(element.isDone) // <== Hook
     const [isActive, setActive] = useState(false)
+    const [isActiveModal, setActiveModal] = useState(false)
 
     console.log(isActive)
 
     useEffect(() => {setIsDone(false)},[]) // <== Hook
 
     return (
+        <>
         <li key={element.id} className=" bg-amber-950 text-white m-2 pr-8 h-20 flex flex-row rounded-xl shadow-xl">
         <input className="m-2" type={"checkbox"} checked={isDone} onChange={() => setIsDone(!isDone)} />
-    <div className="flex flex-row">
+            <div className="flex flex-row">
 
-        <h2 className="p-7"
-            onClick={()=> setActive(!isActive)} 
-        >
-            {element.title}
+            <h2 className="p-7"
+                onClick={()=> setActive(!isActive)}
+            >
+                {element.title}
             
-        </h2>
-        { isActive && (
-        <a className="p-7"> {element.description}</a>
-        )}
+            </h2>
+                { isActive && (
+            <a className="p-7"> {element.description}</a>
+                )}
 
     </div>
 
     <time dateTime={element.date} className="absolute right-7 p-2"> {element.date} </time>
+
+    <button type={"button"} onClick={()=>setActiveModal(true)}>
+        edit
+    </button>
 
     <button type={"submit"} className="ml-auto">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -36,10 +44,16 @@ const ListElement = ({element}) => {
             <path
                 d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
         </svg>
-
     </button>
-
-</li>
+    </li>
+            <Modal isActiveModal={isActiveModal} setActiveModal={setActiveModal}>
+                <label>Tytuł</label>
+                <input className={"text-black text-center"}
+                    type="text"
+                    value={element.title}
+                />
+            </Modal>
+        </>
     )
 }
 export default ListElement;
