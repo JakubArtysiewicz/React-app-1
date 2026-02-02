@@ -9,6 +9,10 @@ const ListElement = ({element}) => {
     const [isActiveModal, setActiveModal] = useState(false)
 
     const [title, setTitle] = useState(element.title);
+
+    const [description, setDescription] = useState(element.description);
+
+
     console.log(title)
 
     console.log(isActive)
