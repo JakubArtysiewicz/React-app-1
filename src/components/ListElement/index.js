@@ -4,9 +4,11 @@ import Modal from "../modal";
 
 const ListElement = ({element}) => {
 
-    const [isDone, setIsDone] = useState(element.isDone) // <== Hook
+    const [isDone, setIsDone] = useState(element.isDone)
     const [isActive, setActive] = useState(false)
     const [isActiveModal, setActiveModal] = useState(false)
+
+    const [error, setError] = useState("");
 
     const [title, setTitle] = useState(element.title);
 
@@ -18,6 +20,16 @@ const ListElement = ({element}) => {
     console.log(isActive)
 
     useEffect(() => {setIsDone(false)},[]) // <== Hook
+
+    const handleSubmit = () => {
+        if (!title.trim() || !description.trim()) {
+            setError("Wszystkie pola wymagane");
+            return;
+        }
+
+        setError("");
+        setActiveModal(false);
+    };
 
     return (
         <>
@@ -42,7 +54,7 @@ const ListElement = ({element}) => {
         edit
     </button>
 
-    <button type={"submit"} className="ml-auto">
+            <button type={"submit"} className="ml-auto">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
              className="bi bi-trash" viewBox="0 0 16 16">
             <path
@@ -53,17 +65,32 @@ const ListElement = ({element}) => {
     </button>
     </li>
             <Modal isActiveModal={isActiveModal} setActiveModal={setActiveModal}>
+
+                {error &&
+                    (<div className="bg-red-100 text-red-600 p-2 rounded mb-3 text-center">
+                        {error}
+                    </div>)
+                }
+
                 <label>Tytuł</label>
                 <input className={"text-black text-center"}
                     type="text"
                     value = {title}
-                       onChange = {(event)=> setTitle(event.target.value)}
+                       onChange = {(event)=> {
+                           setTitle(event.target.value);
+                           setError("");
+                }}
                 />
                 <label>Notatka</label>
                 <input className={"text-black text-center"}
                        type="text"
-                       value={element.description}
+                       value={description}
+                            onChange = {(event)=> {
+                                setDescription(event.target.value);
+                                setError("");
+                            }}
                 />
+                <button onClick={handleSubmit}>Zapisz</button>
             </Modal>
         </>
     )
