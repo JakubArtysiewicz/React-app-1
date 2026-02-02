@@ -5,7 +5,9 @@ import Modal from "../modal";
 const ListElement = ({element}) => {
 
     const [isDone, setIsDone] = useState(element.isDone)
-    const [isActive, setActive] = useState(false)
+
+    const [isActiveDescription, setActiveDescription] = useState(false)
+
     const [isActiveModal, setActiveModal] = useState(false)
 
     const [error, setError] = useState("");
@@ -17,7 +19,7 @@ const ListElement = ({element}) => {
 
     console.log(title)
 
-    console.log(isActive)
+    console.log(isActiveDescription)
 
     useEffect(() => {setIsDone(false)},[]) // <== Hook
 
@@ -38,12 +40,12 @@ const ListElement = ({element}) => {
             <div className="flex flex-row">
 
             <h2 className="p-7"
-                onClick={()=> setActive(!isActive)}
+                onClick={()=> setActiveDescription(!isActiveDescription)}
             >
                 {title}
             
             </h2>
-                { isActive && (<a className="p-7">{element.description}</a>
+                { isActiveDescription && (<a className="p-7">{description}</a>
                 )}
 
     </div>
@@ -90,7 +92,7 @@ const ListElement = ({element}) => {
                                 setError("");
                             }}
                 />
-                <button onClick={handleSubmit}>Zapisz</button>
+                <button onClick={handleSubmit}>save</button>
             </Modal>
         </>
     )
