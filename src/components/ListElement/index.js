@@ -1,46 +1,54 @@
 import {useEffect, useState} from "react";
+import modal from "../modal";
 import Modal from "../modal";
 
 const ListElement = ({element}) => {
 
-    const [isDone, setIsDone] = useState(element.isDone) // <== Hook
-    const [isActive, setActive] = useState(false)
+    const [isDone, setIsDone] = useState(element.isDone)
+
+    const [isActiveDescription, setActiveDescription] = useState(false)
+
     const [isActiveModal, setActiveModal] = useState(false)
+
+    const [error, setError] = useState("");
 
     const [title, setTitle] = useState(element.title);
 
     const [description, setDescription] = useState(element.description);
 
-    console.log(isActive)
+
+    console.log(title)
+
+    console.log(isActiveDescription)
 
     useEffect(() => {setIsDone(false)},[]) // <== Hook
+
+    const handleSubmit = () => {
+        if (!title.trim() || !description.trim()) {
+            setError("Wszystkie pola wymagane");
+            return;
+        }
+
+        setError("");
+        setActiveModal(false);
+    };
 
     return (
         <>
         <li key={element.id} className=" bg-amber-950 text-white m-2 pr-8 h-20 flex flex-row rounded-xl shadow-xl">
         <input className="m-2" type={"checkbox"} checked={isDone} onChange={() => setIsDone(!isDone)} />
             <div className="flex flex-row">
-            {/*<div*/}
-            {/*    className={`*/}
-            {/*        flex justify-center items-center*/}
-            {/*        absolute inset-0*/}
-            {/*        bg-black bg-opacity-75*/}
-            {/*        z-10*/}
-            {/*        transition-opacity duration-300 ease-in-out*/}
-            {/*        ${isActiveModal ? 'opacity-100 visible' : 'opacity-0 invisible'}*/}
-            {/*    `}*/}
-            {/*>*/}
 
             <h2 className="p-7"
-                onClick={()=> setActive(!isActive)}
+                onClick={()=> setActiveDescription(!isActiveDescription)}
             >
                 {title}
             
             </h2>
-                { isActive && (<a className="p-7">{description}</a>
+                { isActiveDescription && (<a className="p-7">{description}</a>
                 )}
 
-            </div>
+    </div>
 
     <time dateTime={element.date} className="absolute right-7 p-2"> {element.date} </time>
 
@@ -48,7 +56,7 @@ const ListElement = ({element}) => {
         edit
     </button>
 
-    <button type={"submit"} className="ml-auto">
+            <button type={"submit"} className="ml-auto">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
              className="bi bi-trash" viewBox="0 0 16 16">
             <path
@@ -59,18 +67,32 @@ const ListElement = ({element}) => {
     </button>
     </li>
             <Modal isActiveModal={isActiveModal} setActiveModal={setActiveModal}>
+
+                {error &&
+                    (<div className="bg-red-100 text-red-600 p-2 rounded mb-3 text-center">
+                        {error}
+                    </div>)
+                }
+
                 <label>Tytuł</label>
                 <input className={"text-black text-center"}
                     type="text"
                     value = {title}
-                       onChange = {(event)=> setTitle(event.target.value)}
+                       onChange = {(event)=> {
+                           setTitle(event.target.value);
+                           setError("");
+                }}
                 />
                 <label>Notatka</label>
                 <input className={"text-black text-center"}
                        type="text"
                        value={description}
-                       onChange={(event )=> setDescription(event.target.value)}
+                            onChange = {(event)=> {
+                                setDescription(event.target.value);
+                                setError("");
+                            }}
                 />
+                <button onClick={handleSubmit}>save</button>
             </Modal>
         </>
     )
